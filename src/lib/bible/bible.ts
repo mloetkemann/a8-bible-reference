@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import BibleRegularExpression from './bibleRegularExpression'
 
-const dataPath = '../../data/'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const dataPath = '../../../data/'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function readFileAsync(filename: string): Promise<any> {
   const filePpath = `${dataPath}${filename}`
   return import(filePpath, { assert: { type: 'json' } }).then(
-    mod => mod.default
+    mod => mod.default,
   )
-
 }
 
 interface translationPath {
@@ -36,7 +38,7 @@ export class Book {
     private id: number,
     private language: string,
     private name: string,
-    private abbrev: string[]
+    private abbrev: string[],
   ) {}
 
   getName(): string {
@@ -60,19 +62,21 @@ class TranslationDataProvider {
   private translationData!: translationPath[]
   private static instances = new Map<string, TranslationDataProvider>()
 
-  private constructor(private language: string, private translation: string) {}
+  private constructor(
+    private language: string,
+    private translation: string,
+  ) {}
 
   private async init() {
     const filename = `translation_${this.translation}.json`
     return readFileAsync(filename).then(
-      content => (this.translationData = content)
+      content => (this.translationData = content),
     )
-
   }
 
   public static async getDataProvider(
     language: string,
-    translation: string
+    translation: string,
   ): Promise<TranslationDataProvider> {
     let result = TranslationDataProvider.instances.get(translation)
     if (!result) {
@@ -125,7 +129,7 @@ class BookNamesDataProvider {
   }
 
   public static async getDataProvider(
-    language: string
+    language: string,
   ): Promise<BookNamesDataProvider> {
     let result = BookNamesDataProvider.instances.get(language)
     if (!result) {
@@ -163,14 +167,17 @@ export default class Bible {
     [BookNamesDataProvider, TranslationDataProvider]
   >
 
-  constructor(private language: string, private translation: string) {
+  constructor(
+    private language: string,
+    private translation: string,
+  ) {
     this.providerLoadedPromise = Promise.all([
       BookNamesDataProvider.getDataProvider(language).then(
-        bookDataProvider => (this.bookDataProvider = bookDataProvider)
+        bookDataProvider => (this.bookDataProvider = bookDataProvider),
       ),
       TranslationDataProvider.getDataProvider(language, translation).then(
         translationDataProvider =>
-          (this.translationDataProvider = translationDataProvider)
+          (this.translationDataProvider = translationDataProvider),
       ),
     ])
   }
@@ -211,7 +218,7 @@ export default class Bible {
       verse < 0
     )
       throw new Error(
-        `Verse ${verse} (book ID: ${book}, chapter: ${chapter}) not found`
+        `Verse ${verse} (book ID: ${book}, chapter: ${chapter}) not found`,
       )
   }
 
@@ -241,7 +248,7 @@ export class BiblePassage {
     private chapter: number,
     private verse?: number,
     private toChapter?: number,
-    private toVerse?: number
+    private toVerse?: number,
   ) {
     const book = typeof _book === 'number' ? bible.getBook(_book) : _book
     if (!book) throw new Error(`Could not find book ${_book}`)
@@ -299,7 +306,7 @@ export class BiblePassage {
   }
 
   static async convertToObject(
-    value: BiblePassageRaw | string
+    value: BiblePassageRaw | string,
   ): Promise<BiblePassage> {
     if (typeof value === 'string') {
       return BiblePassage.convertToObject(JSON.parse(value))
@@ -312,13 +319,16 @@ export class BiblePassage {
       value.chapter,
       value.verse,
       value.toChapter,
-      value.toVerse
+      value.toVerse,
     )
   }
 }
 
 class BibleParser {
-  constructor(private value: string, private bible: Bible) {}
+  constructor(
+    private value: string,
+    private bible: Bible,
+  ) {}
 
   getPassage(): BiblePassage {
     const regularExpResult = new BibleRegularExpression().match(this.value)
@@ -335,7 +345,7 @@ class BibleParser {
             parseInt(regularExpResult.chapter),
             parseInt(regularExpResult.verse),
             undefined,
-            parseInt(regularExpResult.toChapterOrVerse)
+            parseInt(regularExpResult.toChapterOrVerse),
           )
         } else {
           return new BiblePassage(
@@ -344,7 +354,7 @@ class BibleParser {
             parseInt(regularExpResult.chapter),
             parseInt(regularExpResult.verse),
             parseInt(regularExpResult.toChapterOrVerse),
-            parseInt(regularExpResult.toVerse)
+            parseInt(regularExpResult.toVerse),
           )
         }
       }
