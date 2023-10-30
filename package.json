@@ -1,6 +1,6 @@
 {
   "name": "a8-bible-reference",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Typescript Bible Reference Parser",
   "main": "index.js",
   "author": "alpha8lib@gmail.com",
