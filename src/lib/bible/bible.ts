@@ -2,15 +2,8 @@
 import BibleRegularExpression from './bibleRegularExpression'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const dataPath = '../../../data/'
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function readFileAsync(filename: string): Promise<any> {
-  const filePpath = `${dataPath}${filename}`
-  return import(filePpath, { assert: { type: 'json' } }).then(
-    mod => mod.default,
-  )
-}
+import book_data from './data_books_de'
+import translation from './data_de_slt'
 
 interface translationPath {
   id: number
@@ -68,10 +61,7 @@ class TranslationDataProvider {
   ) {}
 
   private async init() {
-    const filename = `translation_${this.translation}.json`
-    return readFileAsync(filename).then(
-      content => (this.translationData = content),
-    )
+    this.translationData = translation
   }
 
   public static async getDataProvider(
@@ -112,11 +102,8 @@ class BookNamesDataProvider {
   private constructor(private language: string) {}
 
   private async init() {
-    const filename = `books_${this.language}.json`
-    readFileAsync(filename).then(content => {
-      this.books = content
-      this.buildBookIndex()
-    })
+    this.books = book_data
+    this.buildBookIndex()
   }
 
   private buildBookIndex() {
