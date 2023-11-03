@@ -5,3 +5,11 @@ spec/
 # ignore src
 
 src/**/*
+.vscode
+.husky
+.github
+.eslintignore
+.eslintrc.js
+.gitignore
+.mocharc.json
+.prettierrc
