@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/mloetkemann/a8-bible-reference/compare/v1.0.0...v1.0.1) (2023-11-03)
+
+
+### Bug Fixes
+
+* missing types ([e2d591e](https://github.com/mloetkemann/a8-bible-reference/commit/e2d591eb117775536e6e5ea58f15c233189205d4))
+
 # 1.0.0 (2023-10-30)
 
 
