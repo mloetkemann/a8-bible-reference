@@ -1,3 +1,11 @@
+## [1.0.2](https://github.com/mloetkemann/a8-bible-reference/compare/v1.0.1...v1.0.2) (2023-11-03)
+
+
+### Bug Fixes
+
+* move json file to ts ([6e8c3d1](https://github.com/mloetkemann/a8-bible-reference/commit/6e8c3d12c7817a6ccc2193b4c6d6a667a2f00938))
+* move json file to ts ([2c8a675](https://github.com/mloetkemann/a8-bible-reference/commit/2c8a675d80324cb1a4b897192b4dda79fc3b68fa))
+
 ## [1.0.1](https://github.com/mloetkemann/a8-bible-reference/compare/v1.0.0...v1.0.1) (2023-11-03)
 
 
