@@ -18,6 +18,7 @@ interface BiblePassageRaw {
   toVerse?: number
   translation: string
   language: string
+  readableString: string
 }
 
 interface BookName {
@@ -60,18 +61,18 @@ class TranslationDataProvider {
     private translation: string,
   ) {}
 
-  private async init() {
+  private init() {
     this.translationData = translation
   }
 
-  public static async getDataProvider(
+  public static getDataProvider(
     language: string,
     translation: string,
-  ): Promise<TranslationDataProvider> {
+  ): TranslationDataProvider {
     let result = TranslationDataProvider.instances.get(translation)
     if (!result) {
       result = new TranslationDataProvider(language, translation)
-      await result.init()
+      result.init()
       TranslationDataProvider.instances.set(translation, result)
     }
     return result
@@ -101,7 +102,7 @@ class BookNamesDataProvider {
 
   private constructor(private language: string) {}
 
-  private async init() {
+  private init() {
     this.books = book_data
     this.buildBookIndex()
   }
@@ -115,13 +116,11 @@ class BookNamesDataProvider {
     })
   }
 
-  public static async getDataProvider(
-    language: string,
-  ): Promise<BookNamesDataProvider> {
+  public static getDataProvider(language: string): BookNamesDataProvider {
     let result = BookNamesDataProvider.instances.get(language)
     if (!result) {
       result = new BookNamesDataProvider(language)
-      await result.init()
+      result.init()
       BookNamesDataProvider.instances.set(language, result)
     }
     return result
@@ -140,8 +139,9 @@ class BookNamesDataProvider {
   }
 
   findBook(val: string): BookName | undefined {
-    const id = this.bookIndex.get(val)
-    if (id) {
+    let id: number | undefined = -1
+    id = this.bookIndex.get(val)
+    if (id || id === 0) {
       return this.getBook(id)
     }
   }
@@ -150,29 +150,16 @@ class BookNamesDataProvider {
 export default class Bible {
   private bookDataProvider!: BookNamesDataProvider
   private translationDataProvider!: TranslationDataProvider
-  providerLoadedPromise: Promise<
-    [BookNamesDataProvider, TranslationDataProvider]
-  >
 
   constructor(
     private language: string,
     private translation: string,
   ) {
-    this.providerLoadedPromise = Promise.all([
-      BookNamesDataProvider.getDataProvider(language).then(
-        bookDataProvider => (this.bookDataProvider = bookDataProvider),
-      ),
-      TranslationDataProvider.getDataProvider(language, translation).then(
-        translationDataProvider =>
-          (this.translationDataProvider = translationDataProvider),
-      ),
-    ])
-  }
-
-  public async providerLoaded(): Promise<
-    [BookNamesDataProvider, TranslationDataProvider]
-  > {
-    return this.providerLoadedPromise
+    this.bookDataProvider = BookNamesDataProvider.getDataProvider(language)
+    this.translationDataProvider = TranslationDataProvider.getDataProvider(
+      language,
+      translation,
+    )
   }
 
   private getBookDataProvider(): BookNamesDataProvider {
@@ -285,6 +272,7 @@ export class BiblePassage {
       toVerse: this.toVerse,
       language: this.bible.getLanguage(),
       translation: this.bible.getTranslation(),
+      readableString: this.toString(),
     }
   }
 
@@ -292,14 +280,11 @@ export class BiblePassage {
     return JSON.stringify(this.toRaw())
   }
 
-  static async convertToObject(
-    value: BiblePassageRaw | string,
-  ): Promise<BiblePassage> {
+  static convertToObject(value: BiblePassageRaw | string): BiblePassage {
     if (typeof value === 'string') {
       return BiblePassage.convertToObject(JSON.parse(value))
     }
     const bible = new Bible(value.language, value.translation)
-    await bible.providerLoaded()
     return new BiblePassage(
       bible,
       value.book,
