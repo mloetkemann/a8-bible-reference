@@ -14,3 +14,4 @@ src/**/*
 .mocharc.json
 .prettierrc
 data/*
+.tsconfig.json
