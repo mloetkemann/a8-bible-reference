@@ -1,6 +1,6 @@
 {
   "name": "a8-bible-reference",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Typescript Bible Reference Parser",
   "type": "module",
   "main": "dist/index.js",
@@ -24,7 +24,7 @@
     "husky": "^8.0.3",
     "mocha": "^10.2.0",
     "prettier": "^3.0.3",
-    "semantic-release": "^22.0.7",
+    "semantic-release": "^22.0.8",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },

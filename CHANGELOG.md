@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/mloetkemann/a8-bible-reference/compare/v1.0.2...v1.1.0) (2023-11-20)
+
+
+### Features
+
+* add readable string to object ([#3](https://github.com/mloetkemann/a8-bible-reference/issues/3)) ([82fd43c](https://github.com/mloetkemann/a8-bible-reference/commit/82fd43ce1955df301680e6b07220ac170c9b23b6))
+
 ## [1.0.2](https://github.com/mloetkemann/a8-bible-reference/compare/v1.0.1...v1.0.2) (2023-11-03)
 
 
